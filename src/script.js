@@ -1,19 +1,19 @@
 import './style.css'
 import * as THREE from 'three'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-import fragment from './shader/fragment.glsl'
-import vertex from './shader/vertex.glsl'
+import fragmentShader from './shader/fragment.glsl'
+import vertexShader from './shader/vertex.glsl'
 
 import image1 from '../assets/images/test1.jpg'
 import image2 from '../assets/images/test2.jpg'
 import image3 from '../assets/images/test3.jpg'
 
+import TouchTexture from './TouchTexture'
+
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { CustomPass } from './customPass.js'
-import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 
 /**
@@ -44,7 +44,10 @@ const scene = new THREE.Scene()
 const stats = Stats()
 stats.domElement.style.position = 'absolute'
 stats.domElement.style.top = '0px'
-document.body.appendChild(stats.domElement)
+// document.body.appendChild(stats.domElement)
+
+// TouchTexture
+const touchTexture = new TouchTexture(128)
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -65,9 +68,6 @@ const camera = new THREE.PerspectiveCamera(
   1000
 )
 
-// Orbit Controls
-const controls = new OrbitControls(camera, renderer.domElement)
-
 camera.position.z = 5
 
 // Postprocessing
@@ -75,11 +75,9 @@ const composer = new EffectComposer(renderer)
 composer.addPass(new RenderPass(scene, camera))
 
 const effect1 = new ShaderPass(CustomPass)
+effect1.uniforms.uTouchTexture.value = touchTexture.texture
+effect1.uniforms.uDimensions.value = new THREE.Vector2(sizes.width, sizes.height)
 composer.addPass(effect1)
-
-// const effect2 = new ShaderPass(RGBShiftShader)
-// effect2.uniforms.amount.value = 0.0015
-// composer.addPass(effect2)
 
 // Textures
 const textureLoader = new THREE.TextureLoader()
@@ -89,7 +87,7 @@ const textures = [image1, image2, image3].map(url => {
 })
 
 // Geometries
-const geometry = new THREE.PlaneGeometry(1, 1, 1, 1)
+const geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1)
 
 // Objects
 const meshes = []
@@ -105,8 +103,8 @@ textures.forEach((texture, index) => {
       uTexture: { value: texture },
       uResolution: { value: new THREE.Vector4() }
     },
-    fragmentShader: fragment,
-    vertexShader: vertex
+    fragmentShader,
+    vertexShader
   })
   const mesh = new THREE.Mesh(geometry, material)
   mesh.position.x = index * 1.5 - 1.5
@@ -116,6 +114,19 @@ textures.forEach((texture, index) => {
   meshes.push(mesh)
 })
 
+// Listeners
+window.addEventListener('mousemove', onMouseMove, false)
+
+const mousePosition = {
+  width: 0,
+  height: 0
+}
+
+function onMouseMove (e) {
+  mousePosition.width = e.clientX
+  mousePosition.height = e.clientY
+}
+
 // Animation Loop
 let time = 0
 
@@ -123,9 +134,10 @@ const tick = () => {
   time += 0.01
 
   effect1.uniforms.uTime.value = time
+  touchTexture.addTouch(touchTexture.getTouchTexturePosition(sizes.width, sizes.height, mousePosition.width, mousePosition.height), 1)
 
+  touchTexture.update()
   stats.update()
-  controls.update()
   requestAnimationFrame(tick)
   composer.render()
 }
