@@ -1,5 +1,5 @@
-# Cube Game
-https://philszalay.github.io/Cube-Game/
+# Three.js Examples
+https://philszalay.github.io/threejs-pixel-river-example/
 
 ## Setup
 Download [Node.js 16](https://nodejs.org/en/download/).

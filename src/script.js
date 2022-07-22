@@ -16,6 +16,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { CustomPass } from './customPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 
+import { ARButton } from 'three/examples/jsm/webxr/ARButton.js'
+
 /**
  * Base
  */
@@ -53,11 +55,16 @@ const touchTexture = new TouchTexture(128)
 const renderer = new THREE.WebGLRenderer({
 })
 
+// AR Button
+const arButton = ARButton.createButton(renderer)
+document.body.appendChild(arButton)
+
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setSize(sizes.width, sizes.height)
 renderer.setClearColor(colors.rendererClearColor, 1)
 renderer.physicallyCorrectLights = true
 renderer.outputEncoding = THREE.sRGBEncoding
+renderer.xr.enabled = true
 document.body.appendChild(renderer.domElement)
 
 // Camera

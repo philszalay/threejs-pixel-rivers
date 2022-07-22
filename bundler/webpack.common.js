@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
     {
       filename: 'bundle.[contenthash].js',
       path: path.resolve(__dirname, '../dist'),
-      publicPath: argv.mode === 'production' ? '/Cube-Game/' : '/'
+      publicPath: argv.mode === 'production' ? '/threejs-pixel-river-example/' : '/'
     },
     devtool: 'source-map',
     plugins:
@@ -18,17 +18,7 @@ module.exports = (env, argv) => {
           template: path.resolve(__dirname, '../src/index.html'),
           minify: true,
           favicon: './assets/favicon/favicon.png',
-          meta: {
-            'og:url': { property: 'og:url', content: 'https://philszalay.github.io/Cube-Game/' },
-            'og:description': { property: 'og:description', content: 'Interactive Cube Game implemented with Three.js' },
-            'og:type': { property: 'og:type', content: 'website' },
-            'og:title': { property: 'og:title', content: 'Interactive Cube Game' },
-            'og:image': { property: 'og:image', content: 'https://philszalay.github.io/Cube-Game/assets/images/preview_image.png' },
-            'twitter:card': { name: 'twitter:card', content: 'summary_large_image' },
-            'twitter:title': { name: 'twitter:title', content: 'Interactive Cube Game' },
-            'twitter:creator': { name: 'twitter:creator', content: '@PhilSzalay' },
-            'twitter:image': { name: 'twitter:image', content: 'https://philszalay.github.io/Cube-Game/assets/images/preview_image.png' }
-          }
+          meta: {}
         }),
         new MiniCSSExtractPlugin()
       ],

@@ -6,7 +6,7 @@ export default class TouchTexture {
   constructor (size) {
     this.size = size
     this.maxAge = 150
-    this.radius = 0.1
+    this.radius = 0.05
     this.trail = []
 
     this.initTexture()
