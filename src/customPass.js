@@ -44,11 +44,11 @@ const CustomPass = {
     'varying vec2 vUv;',
 
     'vec2 getTouchTexturePosition(vec2 uv) {',
-    'return vec2((uDimensions.x / 2.0 + uv.x) / uDimensions.x - 0.5, (uDimensions.y / 2.0 + uv.y) / uDimensions.y - 0.5);',
+    '   return vec2((uDimensions.x / 2.0 + (uv.x / 2.0)) / uDimensions.x - 0.5, (uDimensions.y / 2.0 + (uv.y / 2.0)) / uDimensions.y - 0.5);',
     '}',
 
     'void main() {',
-    'float mouseDistortion = texture2D(uTouchTexture, getTouchTexturePosition(vec2(gl_FragCoord.x, gl_FragCoord.y))).r;',
+    '   float mouseDistortion = texture2D(uTouchTexture, getTouchTexturePosition(vec2(gl_FragCoord.x, gl_FragCoord.y))).r;',
     '   vec2 p = 2.0 * vUv - vec2(1.0, 1.0);',
     '   p += 0.1 * cos(scale * 2.0 * p.yx + uTime + vec2(1.2, 3.4));',
     '   p += 0.1 * cos(scale * 2.7 * p.yx + 1.4 * uTime + vec2(1.2, 3.4));',

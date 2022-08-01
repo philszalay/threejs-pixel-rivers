@@ -16,8 +16,6 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { CustomPass } from './customPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 
-import { GUI } from 'dat.gui'
-
 /**
  * Base
  */
