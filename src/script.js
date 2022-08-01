@@ -131,6 +131,7 @@ const mousePosition = {
 function onMouseMove (e) {
   mousePosition.width = e.clientX
   mousePosition.height = e.clientY
+  touchTexture.addTouch(touchTexture.getTouchTexturePosition(sizes.width, sizes.height, mousePosition.width, mousePosition.height), 1)
 }
 
 // Sliders
@@ -165,7 +166,7 @@ const tick = () => {
   time += 0.01
 
   customShaderPass.uniforms.uTime.value = time
-  touchTexture.addTouch(touchTexture.getTouchTexturePosition(sizes.width, sizes.height, mousePosition.width, mousePosition.height), 1)
+  // touchTexture.addTouch(touchTexture.getTouchTexturePosition(sizes.width, sizes.height, mousePosition.width, mousePosition.height), 1)
 
   touchTexture.update()
   stats.update()
