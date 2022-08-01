@@ -10,15 +10,17 @@ const CustomPass = {
     scale: { value: 1 },
     uTime: { value: 0 },
     uTouchTexture: { value: null },
-    uDimensions: { value: null }
+    uDimensions: { value: null },
+    colorXFactor: { value: 0 },
+    colorYFactor: { value: 0 }
   },
 
   vertexShader: [
     'varying vec2 vUv;',
 
     'void main() {',
-    '	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
-    '	vUv = uv;',
+    'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+    'vUv = uv;',
 
     '}'
 
@@ -33,6 +35,9 @@ const CustomPass = {
     'uniform float uTime;',
     'uniform sampler2D uTouchTexture;',
     'uniform vec2 uDimensions;',
+    'uniform float colorXFactor;',
+    'uniform float colorYFactor;',
+    'uniform float riverColorFactor;',
 
     'uniform sampler2D tDiffuse;',
 
@@ -49,9 +54,11 @@ const CustomPass = {
     '   p += 0.1 * cos(scale * 2.7 * p.yx + 1.4 * uTime + vec2(1.2, 3.4));',
     '   p += 0.1 * cos(scale * 3.0 * p.yx + 2.0 * uTime + vec2(2.2, 1.4));',
     '   p += 0.2 * cos(scale * 2.0 * p.yx + 2.6 * uTime + vec2(10.2, 3.4));',
-    ' p += mouseDistortion * 2.;',
+    '   p += mouseDistortion * 2.;',
     '   vec2 newUv = vec2(mix(vUv.x, length(p), 1. + 0.0), mix(vUv.y, 0.0, 1.));',
     '   vec4 color = texture2D(tDiffuse, newUv);',
+    '   color.y = color.y + (mouseDistortion / p.x) * colorYFactor;',
+    '   color.x = color.x + (mouseDistortion / p.y) * colorXFactor;',
     '   gl_FragColor = color;',
     '}'
 

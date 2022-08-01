@@ -24,6 +24,8 @@ export default class TouchTexture {
 
     this.canvas.id = 'touchTexture'
     this.canvas.style.width = this.canvas.style.height = `${this.canvas.width}px`
+
+    // document.querySelector('body').appendChild(this.canvas)
   }
 
   update () {

@@ -16,15 +16,13 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { CustomPass } from './customPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 
-import { ARButton } from 'three/examples/jsm/webxr/ARButton.js'
+import { GUI } from 'dat.gui'
 
 /**
  * Base
  */
 
 // TODO: LoadingManager
-
-// TODO: Automatic resizing
 
 // Variables
 const sizes = {
@@ -36,9 +34,6 @@ const colors = {
   rendererClearColor: 0x000000
 }
 
-// Canvas
-// const canvas = document.querySelector('canvas.webgl')
-
 // Scene
 const scene = new THREE.Scene()
 
@@ -46,7 +41,6 @@ const scene = new THREE.Scene()
 const stats = Stats()
 stats.domElement.style.position = 'absolute'
 stats.domElement.style.top = '0px'
-// document.body.appendChild(stats.domElement)
 
 // TouchTexture
 const touchTexture = new TouchTexture(128)
@@ -54,10 +48,6 @@ const touchTexture = new TouchTexture(128)
 // Renderer
 const renderer = new THREE.WebGLRenderer({
 })
-
-// AR Button
-const arButton = ARButton.createButton(renderer)
-document.body.appendChild(arButton)
 
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setSize(sizes.width, sizes.height)
@@ -81,10 +71,10 @@ camera.position.z = 5
 const composer = new EffectComposer(renderer)
 composer.addPass(new RenderPass(scene, camera))
 
-const effect1 = new ShaderPass(CustomPass)
-effect1.uniforms.uTouchTexture.value = touchTexture.texture
-effect1.uniforms.uDimensions.value = new THREE.Vector2(sizes.width, sizes.height)
-composer.addPass(effect1)
+const customShaderPass = new ShaderPass(CustomPass)
+customShaderPass.uniforms.uTouchTexture.value = touchTexture.texture
+customShaderPass.uniforms.uDimensions.value = new THREE.Vector2(sizes.width, sizes.height)
+composer.addPass(customShaderPass)
 
 // Textures
 const textureLoader = new THREE.TextureLoader()
@@ -97,7 +87,7 @@ const textures = [image1, image2, image3].map(url => {
 const geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1)
 
 // Objects
-const meshes = []
+const images = new THREE.Group()
 
 textures.forEach((texture, index) => {
   const material = new THREE.RawShaderMaterial({
@@ -113,13 +103,15 @@ textures.forEach((texture, index) => {
     fragmentShader,
     vertexShader
   })
+
   const mesh = new THREE.Mesh(geometry, material)
   mesh.position.x = index * 1.5 - 1.5
   mesh.position.y = -3
   mesh.rotation.z = Math.PI / 2
-  scene.add(mesh)
-  meshes.push(mesh)
+  images.add(mesh)
 })
+
+scene.add(images)
 
 // Listeners
 window.addEventListener('mousemove', onMouseMove, false)
@@ -134,13 +126,38 @@ function onMouseMove (e) {
   mousePosition.height = e.clientY
 }
 
+// Sliders
+document.getElementById('scale').oninput = function () {
+  customShaderPass.uniforms.scale.value = this.value
+}
+
+document.getElementById('colorX').oninput = function () {
+  customShaderPass.uniforms.colorXFactor.value = this.value
+}
+
+document.getElementById('colorY').oninput = function () {
+  customShaderPass.uniforms.colorYFactor.value = this.value
+}
+
+document.getElementById('radius').oninput = function () {
+  touchTexture.radius = this.value
+}
+
+document.getElementById('textureX').oninput = function () {
+  images.position.x = this.value
+}
+
+document.getElementById('textureZ').oninput = function () {
+  images.position.z = this.value
+}
+
 // Animation Loop
 let time = 0
 
 const tick = () => {
   time += 0.01
 
-  effect1.uniforms.uTime.value = time
+  customShaderPass.uniforms.uTime.value = time
   touchTexture.addTouch(touchTexture.getTouchTexturePosition(sizes.width, sizes.height, mousePosition.width, mousePosition.height), 1)
 
   touchTexture.update()
