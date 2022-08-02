@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
     {
       filename: 'bundle.[contenthash].js',
       path: path.resolve(__dirname, '../dist'),
-      publicPath: argv.mode === 'production' ? '/threejs-pixel-river-example/' : '/'
+      publicPath: argv.mode === 'production' ? '/threejs-pixel-rivers/' : '/'
     },
     devtool: 'source-map',
     plugins:

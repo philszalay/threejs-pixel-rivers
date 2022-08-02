@@ -1,5 +1,5 @@
 # Three.js Examples
-https://philszalay.github.io/threejs-pixel-river-example/
+https://philszalay.github.io/threejs-pixel-rivers/
 
 ## Setup
 Download [Node.js 16](https://nodejs.org/en/download/).
