@@ -18,7 +18,17 @@ module.exports = (env, argv) => {
           template: path.resolve(__dirname, '../src/index.html'),
           minify: true,
           favicon: './assets/favicon/favicon.png',
-          meta: {}
+          meta: {
+            'og:url': { property: 'og:url', content: 'https://philszalay.github.io/threejs-pixel-rivers/' },
+            'og:description': { property: 'og:description', content: 'Pixel Rivers tool implemented with Three.js' },
+            'og:type': { property: 'og:type', content: 'website' },
+            'og:title': { property: 'og:title', content: 'Pixel Rivers' },
+            'og:image': { property: 'og:image', content: 'https://philszalay.github.io/threejs-pixel-rivers/assets/images/preview_image.png' },
+            'twitter:card': { name: 'twitter:card', content: 'summary_large_image' },
+            'twitter:title': { name: 'twitter:title', content: 'Pixel Rivers' },
+            'twitter:creator': { name: 'twitter:creator', content: '@PhilSzalay' },
+            'twitter:image': { name: 'twitter:image', content: 'https://philszalay.github.io/threejs-pixel-rivers/assets/images/preview_image.png' }
+          }
         }),
         new MiniCSSExtractPlugin()
       ],
