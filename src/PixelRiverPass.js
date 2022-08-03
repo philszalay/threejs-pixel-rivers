@@ -11,8 +11,8 @@ const CustomPass = {
     uTime: { value: 0 },
     uTouchTexture: { value: null },
     uDimensions: { value: null },
-    colorXFactor: { value: 0 },
-    colorYFactor: { value: 0 }
+    colorXFactor: { value: -0.8 },
+    colorYFactor: { value: -0.8 }
   },
 
   vertexShader:
